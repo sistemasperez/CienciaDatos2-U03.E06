@@ -441,41 +441,41 @@
         <h2>La Prueba del "Copy-Paste": ¿Memorizó el modelo?</h2>
       </div>
 
-      <p>Cualquier evaluador escéptico preguntará: <em>"¿Cómo sabes que la red inventó esa ropa y no le hizo copy-paste a una foto que ya vio en el entrenamiento?"</em></p>
+      <p>Una pregunta técnica fundamental en evaluación generativa es: <em>"¿Cómo se demuestra que el modelo genera muestras originales y no memoriza réplicas exactas del conjunto de entrenamiento?"</em></p>
 
       <div class="analogy" style="border-left-color: var(--success);">
-        <div class="analogy-title">🔬 La Prueba con Nearest Neighbors (Vecinos más Cercanos)</div>
-        Generamos 500 prendas inventadas y medimos la distancia matemática píxel a píxel contra todas las fotos de entrenamiento:
+        <div class="analogy-title">🔬 Auditoría con Nearest Neighbors (Vecinos más Cercanos)</div>
+        Generamos 500 prendas sintéticas y medimos la distancia matemática euclidiana ($L_2$) píxel a píxel contra el conjunto de entrenamiento:
         <ul style="margin: 8px 0 0 16px;">
-          <li><strong>Distancia mínima encontrada:</strong> <code>1.6831</code> (¡Nunca cero!).</li>
-          <li><strong>Distancia promedio:</strong> <code>2.9571</code>.</li>
+          <li><strong>Distancia mínima observada:</strong> <code>1.6831</code> (estrictamente mayor que cero).</li>
+          <li><strong>Distancia promedio al vecino más cercano:</strong> <code>2.9571</code>.</li>
         </ul>
-        Si hubiera memorizado, la distancia mínima sería <code>0.0000</code> (réplica exacta). Como es 1.68, queda formalmente demostrado que <strong>las muestras son prendas nuevas originales</strong> generadas por la red.
+        Si el modelo hubiera memorizado o sobreajustado imágenes de entrenamiento, la distancia mínima convergería a <code>0.0000</code>. El valor obtenido confirma empíricamente que <strong>las muestras son combinaciones continuas originales</strong> generadas a partir de la variedad latente aprendida.
       </div>
     </div>
 
-    <!-- SECCIÓN 7: MACHETE PARA DEFENSA ORAL -->
-    <div class="defense-box">
-      <h3>🛡️ Machete Rápido para Defensa ante el Profesor</h3>
+    <!-- SECCIÓN 7: PREGUNTAS CONCEPTUALES FRECUENTES -->
+    <div class="defense-box" style="border-color: rgba(99, 102, 241, 0.4);">
+      <h3 style="color: var(--secondary);">📚 Preguntas Conceptuales Frecuentes (FAQ Técnico)</h3>
 
       <div class="qa-item">
         <div class="qa-q">1. ¿Cuál es la diferencia fundamental entre el Autoencoder y el VAE?</div>
-        <div class="qa-a">El Autoencoder es determinista y comprime hacia un espacio latente discontinuo con huecos (sirve para comprimir, no para generar). El VAE es probabilístico y genera un espacio continuo y regularizado con Divergencia KL, lo que permite muestrear ropa nueva desde una distribución normal.</div>
+        <div class="qa-a">El Autoencoder es determinista y comprime hacia un espacio latente discontinuo con regiones vacías (adecuado para compresión y reconstrucción, pero no para generación). El VAE es probabilístico y genera un espacio continuo y regularizado mediante la Divergencia KL, lo que permite muestrear indumentaria nueva desde una distribución normal estándar.</div>
       </div>
 
       <div class="qa-item">
-        <div class="qa-q">2. ¿Por qué usamos exactamente 2 dimensiones latentes en el VAE?</div>
-        <div class="qa-a">Para poder graficar todo el espacio latente directamente en un plano cartesiano 2D sin pérdida por PCA/t-SNE, y para poder mover dos deslizadores (X, Y) en tiempo real en la app de Streamlit.</div>
+        <div class="qa-q">2. ¿Por qué se utilizó una dimensionalidad latente D=2 en el VAE?</div>
+        <div class="qa-a">Permite visualizar el espacio latente completo directamente en un plano cartesiano 2D sin necesidad de proyecciones aproximadas (PCA o t-SNE), facilitando la exploración interactiva mediante deslizadores continuos en la aplicación Streamlit.</div>
       </div>
 
       <div class="qa-item">
-        <div class="qa-q">3. ¿Qué hace el truco de reparametrización?</div>
-        <div class="qa-a">Mueve la operación de muestreo aleatorio fuera del grafo de cálculo (z = μ + σ · ε) para que el azar no corte el paso del gradiente y el modelo pueda entrenarse con retropropagación (backprop).</div>
+        <div class="qa-q">3. ¿Cuál es el rol matemático del truco de reparametrización?</div>
+        <div class="qa-a">Externaliza la variable estocástica fuera del grafo diferenciable mediante la transformación z = μ + σ · ε (donde ε ~ N(0, I₂)). De este modo, el azar no interrumpe el flujo de gradientes y la red puede entrenarse mediante retropropagación estándar (backpropagation).</div>
       </div>
 
       <div class="qa-item">
-        <div class="qa-q">4. ¿Generar datos sintéticos garantiza privacidad de los datos originales?</div>
-        <div class="qa-a">No. Un modelo generativo puede filtrar patrones o memorizar características implícitas si no se utiliza Privacidad Diferencial (DP-SGD). Esto se dejó explícitamente advertido en el Model Card.</div>
+        <div class="qa-q">4. ¿La generación de datos sintéticos sustituye la privacidad diferencial?</div>
+        <div class="qa-a">No. Un modelo generativo profundo puede retener y filtrar información implícita de las muestras de entrenamiento si no se entrena bajo protocolos formales como Privacidad Diferencial (DP-SGD). Esto se documenta explícitamente en el Model Card como consideración ética y técnica.</div>
       </div>
     </div>
 

@@ -19,6 +19,7 @@
 7. [Evaluación de No-Memorización y Diversidad](#evaluación-de-no-memorización-y-diversidad)
 8. [Pruebas Automatizadas (pytest)](#pruebas-automatizadas-pytest)
 9. [Model Card y Ética de Modelos Generativos](#model-card-y-ética-de-modelos-generativos)
+10. [Recursos Didácticos y Documentación Complementaria](#recursos-didácticos-y-documentación-complementaria)
 
 ---
 
@@ -165,3 +166,11 @@ uv run pytest -v
 ## 9. Model Card y Ética de Modelos Generativos
 
 Consulte [`MODEL_CARD.md`](file:///c:/Users/Admin/Desktop/Proyectos/Maestria%20IA%20Uasd/Ciencia%20de%20Datos%20II/Tareas/Unidad%203/INF8239_U03_Generativos_Proyecto_Base_uv/MODEL_CARD.md) para detalles sobre uso previsto, limitaciones de fidelidad por dimensionalidad ($D=2$) y consideraciones éticas sobre privacidad diferencial.
+
+---
+
+## 10. Recursos Didácticos y Documentación Complementaria
+
+Para una comprensión pedagógica y visual de los fundamentos matemáticos y representaciones latentes:
+- **Guía Didáctica y Visual:** [`reports/GUIA_DIDACTICA_EXPLICATIVA.html`](reports/GUIA_DIDACTICA_EXPLICATIVA.html) — Documento explicativo interactivo que desglosa de manera intuitiva el espacio latente, la divergencia KL, el truco de reparametrización y la interpretación morfológica de cada agrupamiento en el scatter plot 2D.
+- **Reporte Formal de Entrega:** [`reports/ENTREGA_EJERCICIO_06_MODELOS_GENERATIVOS.md`](reports/ENTREGA_EJERCICIO_06_MODELOS_GENERATIVOS.md) — Documento consolidado con la tabla principal de métricas, análisis de baselines y declaración ética de IA bajo la rúbrica de la asignatura.
