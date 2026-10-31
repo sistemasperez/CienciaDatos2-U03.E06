@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>INF-8239 · Ejercicio 06: Modelos Generativos (VAE y Autoencoder)</title>
+  <style>
+    @page { size: letter; margin: 18mm 16mm; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      line-height: 1.55;
+      font-size: 13px;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    h1 {
+      color: #0f172a;
+      font-size: 21px;
+      margin-bottom: 4px;
+      border-bottom: 2px solid #3b82f6;
+      padding-bottom: 8px;
+    }
+    .header-meta {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 12.5px;
+      color: #475569;
+    }
+    .header-meta strong { color: #0f172a; }
+    h2 {
+      color: #1e3a8a;
+      font-size: 15px;
+      margin-top: 22px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 4px;
+    }
+    h3 {
+      color: #1e293b;
+      font-size: 13.5px;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 11.5px;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 7px 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 600;
+    }
+    tr:nth-child(even) { background-color: #f8fafc; }
+    td:first-child { text-align: left; }
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      font-size: 10.5px;
+      font-weight: 600;
+      border-radius: 4px;
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    ul, ol {
+      margin: 6px 0 12px 20px;
+      padding: 0;
+    }
+    li { margin-bottom: 4px; }
+    .callout {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+      padding: 10px 14px;
+      margin: 12px 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 12px;
+    }
+    .callout-title {
+      font-weight: bold;
+      color: #15803d;
+      margin-bottom: 3px;
+    }
+    code {
+      background: #f1f5f9;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 11.5px;
+      color: #0f172a;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+    }
+    .img-box {
+      margin: 12px 0;
+      text-align: center;
+      page-break-inside: avoid;
+    }
+    .img-caption {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+    @media print {
+      body { padding: 0; font-size: 11.5px; }
+      h2 { page-break-after: avoid; }
+      table, .img-box { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>INF-8239 · Ejercicio 06: Modelos Generativos (VAE y Autoencoder)</h1>
+
+  <div class="header-meta">
+    <div><strong>Programa:</strong> Maestría en Inteligencia Artificial · Universidad Autónoma de Santo Domingo (UASD)</div>
+    <div><strong>Asignatura:</strong> Ciencia de Datos II | <strong>Docente:</strong> Edwin Ramón José Nolasco</div>
+    <div><strong>Estudiante:</strong> Juan Aníbal Pérez | <strong>Fecha:</strong> Octubre 2026</div>
+    <div><strong>Enlace al Repositorio GitHub:</strong> <a href="https://github.com/sistemasperez/CienciaDatos2-U03.E06" target="_blank" style="color: #2563eb; text-decoration: underline;"><code>https://github.com/sistemasperez/CienciaDatos2-U03.E06</code></a></div>
+  </div>
+
+  <h2>1. Tabla Principal de Resultados Comparativos</h2>
+  <p>Evaluación cuantitativa sobre las 10,000 imágenes del conjunto de prueba independiente de Fashion-MNIST (28 &times; 28 &times; 1):</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Modelo / Enfoque</th>
+        <th>Espacio Latente (<i>D</i>)</th>
+        <th>Parámetros</th>
+        <th>Tiempo Entrenamiento</th>
+        <th>Reconstrucción Test (BCE)</th>
+        <th>Reconstrucción Test (MSE)</th>
+        <th>Regularización KL</th>
+        <th>Distancia Mínima a Train (<i>L</i><sub>2</sub>)</th>
+        <th>Diversidad Muestral</th>
+        <th>Tamaño Modelo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Autoencoder Estándar (Baseline)</strong></td>
+        <td>16</td>
+        <td>25,888</td>
+        <td>7.86 s</td>
+        <td>0.3068</td>
+        <td>0.02029</td>
+        <td>N/A (Discontinuo)</td>
+        <td>N/A (No Generativo)</td>
+        <td>N/A</td>
+        <td>330.66 KB</td>
+      </tr>
+      <tr style="background-color: #eff6ff; font-weight: 500;">
+        <td><strong>VAE (Variational Autoencoder)</strong> <span class="badge">Generativo</span></td>
+        <td>2</td>
+        <td>202,516</td>
+        <td>12.44 s</td>
+        <td>0.3405</td>
+        <td>0.03299</td>
+        <td>6.3018</td>
+        <td>1.6831</td>
+        <td>5.8485</td>
+        <td>415.66 KB</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2. Metodología, Datos y Control de Fuga (Data Leakage)</h2>
+  <p>El proyecto utiliza Fashion-MNIST (Zalando Research, licencia MIT), integrado por 70,000 imágenes monocanal en escala de grises distribuidas equitativamente en 10 clases de indumentaria (6,000 ejemplos de entrenamiento y 1,000 de prueba por categoría):</p>
+  <ul>
+    <li><strong>Campos del dataset:</strong> Matrices <code>images</code> de 28 &times; 28 &times; 1 píxeles normalizadas analíticamente a reales en [0.0, 1.0] (<code>float32</code>), y enteros <code>labels</code> {0, ..., 9} que mapean las clases: 0: <em>T-shirt/top</em>, 1: <em>Trouser</em>, 2: <em>Pullover</em>, 3: <em>Dress</em>, 4: <em>Coat</em>, 5: <em>Sandal</em>, 6: <em>Shirt</em>, 7: <em>Sneaker</em>, 8: <em>Bag</em> y 9: <em>Ankle boot</em>.</li>
+    <li><strong>Partición y Control de Fuga:</strong> La normalización se realiza por división fija escalar (<code>x / 255.0</code>), sin estimar medias ni desviaciones sobre el conjunto de test. Los modelos se entrenaron exclusivamente con <code>x_train</code> (60,000 filas). El conjunto <code>x_test</code> (10,000 filas) se mantuvo estrictamente aislado hasta la evaluación final fuera de muestra.</li>
+  </ul>
+
+  <h2>3. Análisis de Reconstrucción, Muestreo e Interpolación</h2>
+  <div class="img-box">
+    <img src="ae_vae_panel.png" alt="Panel Comparativo AE vs VAE">
+    <div class="img-caption"><strong>Figura 1:</strong> Comparativa de 12 muestras: Originales, Reconstrucción AE, Reconstrucción VAE y Muestras desde el prior <i>z</i> ~ <i>N</i>(0, <i>I</i><sub>2</sub>).</div>
+  </div>
+
+  <div class="img-box">
+    <img src="interpolation.png" alt="Interpolación Latente Continua">
+    <div class="img-caption"><strong>Figura 2:</strong> Interpolación lineal continua en el espacio latente entre <i>z<sub>A</sub></i>(-2.0, -1.0) y <i>z<sub>B</sub></i>(2.0, 1.0).</div>
+  </div>
+
+  <div class="img-box">
+    <img src="latent_space_2d.png" alt="Espacio Latente 2D">
+    <div class="img-caption"><strong>Figura 3:</strong> Proyección 2D del espacio latente coloreado por las 10 clases de Fashion-MNIST.</div>
+  </div>
+
+  <h2>4. Auditoría de No-Memorización (Nearest Neighbors) y Diversidad</h2>
+  <div class="callout">
+    <div class="callout-title">Evidencia Empírica contra el Sobreajuste y la Copia Directa</div>
+    Se calculó la distancia euclidiana mínima entre 500 muestras sintéticas generadas y las imágenes de entrenamiento reales mediante Nearest Neighbors. La <strong>distancia mínima fue de 1.6831</strong> (y promedio de 2.9571). Al ser significativamente mayor que cero, se comprueba que el VAE no memoriza ni clona instancias existentes, sino que sintetiza nuevas prendas dentro de la variedad continua aprendida con una diversidad media intra-muestral de 5.8485.
+  </div>
+
+  <h2>5. Costo Computacional, Límites y Conclusiones</h2>
+  <ul>
+    <li><strong>Costo:</strong> El Autoencoder requirió 7.86 s (25,888 parámetros, 330.66 KB) y el VAE 12.44 s (202,516 parámetros, 415.66 KB) en CPU estándar.</li>
+    <li><strong>Límites:</strong> La compresión extrema a <i>D</i>=2 facilita la visualización e interactividad directa en Streamlit (<code>app/streamlit_app.py</code>), pero suprime texturas de alta frecuencia y produce bordes difusos.</li>
+    <li><strong>Ética y Privacidad:</strong> La generación de datos sintéticos no garantiza privacidad matemática por sí misma si no se acompaña de Privacidad Diferencial (DP-SGD).</li>
+  </ul>
+
+  <h2>6. Declaración de Uso Ético y Responsable de IA</h2>
+  <p>Se contó con asistencia de Gemini 3.8 Flash (High) vía Antigravity IDE para depuración de pruebas automatizadas con <code>pytest</code>, vectorización de distancias de vecinos más cercanos y estructuración del Model Card. El estudiante verificó las ecuaciones analíticas de divergencia KL y reparametrización, comprobó el 100% de las 8 pruebas unitarias y asume la autoría y responsabilidad íntegra de la entrega.</p>
+
+</body>
+</html>
