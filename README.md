@@ -5,6 +5,7 @@
 **Docente:** Edwin Ramón José Nolasco  
 **Estudiante:** Juan Aníbal Pérez  
 **Repositorio GitHub:** [https://github.com/sistemasperez/CienciaDatos2-U03.E06](https://github.com/sistemasperez/CienciaDatos2-U03.E06)  
+**Documento de Entrega (PDF):** [📄 Descargar / Ver PDF del Informe](reports/ENTREGA_EJERCICIO_06_MODELOS_GENERATIVOS.pdf) *(o versión Markdown: [reports/ENTREGA_EJERCICIO_06_MODELOS_GENERATIVOS.md](reports/ENTREGA_EJERCICIO_06_MODELOS_GENERATIVOS.md))*  
 **Estado:** Proyecto 100% reproducible, auditado y testeado bajo rúbrica analítica (5.0 / 5.0 pts).
 
 ---
