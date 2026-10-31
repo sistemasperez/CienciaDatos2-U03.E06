@@ -21,10 +21,17 @@ La evaluación cuantitativa se realizó sobre las 10,000 imágenes del conjunto 
 
 ## 2. Metodología, Datos y Reproducibilidad
 
-### 2.1 Dataset y Preprocesamiento
-El proyecto utiliza Fashion-MNIST (Zalando Research, licencia MIT), integrado por 70,000 imágenes en escala de grises de 10 categorías de indumentaria. La partición respeta el protocolo oficial: 60,000 imágenes para entrenamiento y 10,000 para evaluación fuera de muestra. 
+### 2.1 Dataset, Campos y Control de Fuga de Datos (Data Leakage)
+El proyecto utiliza Fashion-MNIST (Zalando Research, licencia MIT), creado por Han Xiao et al. como un estándar riguroso para sustituir el MNIST clásico. Contiene 70,000 imágenes monocanal en escala de grises distribuidas en 10 clases balanceadas de indumentaria (6,000 ejemplos de entrenamiento y 1,000 de prueba por categoría):
 
-Los tensores se normalizaron mediante división por 255.0, escalando los valores al intervalo continuo $[0.0, 1.0]$ con tipo de dato `float32`. La integridad de los contratos de entrada y salida se verificó mediante pruebas automatizadas en `tests/test_data.py`.
+- **Campos del dataset:**
+  - `images` (Entrada): Matrices de $28 \times 28 \times 1$ píxeles. En origen son enteros en $[0, 255]$ (`uint8`) y se normalizan a reales en $[0.0, 1.0]$ (`float32`), donde 0.0 corresponde al fondo y 1.0 al trazo de máxima intensidad.
+  - `labels` (Variable de clase): Enteros $\{0, \dots, 9\}$ correspondientes a: 0: *T-shirt/top*, 1: *Trouser*, 2: *Pullover*, 3: *Dress*, 4: *Coat*, 5: *Sandal*, 6: *Shirt*, 7: *Sneaker*, 8: *Bag* y 9: *Ankle boot*.
+- **Particiones oficiales:** 60,000 imágenes para entrenamiento (`x_train`) y 10,000 para evaluación fuera de muestra (`x_test`), predefinidas por Zalando Research para garantizar comparabilidad entre investigaciones.
+- **Prevención de Data Leakage (Fuga de Datos):**
+  - La normalización se realiza por división analítica fija ($x / 255.0$), sin ajustar parámetros estadísticos (medias o desviaciones muestrales) derivados del conjunto de test.
+  - Los modelos optimizan sus pesos exclusivamente sobre `x_train`. El conjunto `x_test` permaneció estrictamente aislado, utilizándose únicamente para la evaluación final de reconstrucción fuera de muestra.
+  - Para auditar el riesgo de memorización propio de modelos generativos, se evaluó la distancia euclidiana al vecino más cercano frente a `x_train`, confirmando que el VAE no memoriza ni clona instancias existentes.
 
 ### 2.2 Formulación de las Arquitecturas
 - **Autoencoder (Baseline):** Aplica una compresión determinista proyectando los 784 píxeles a un cuello de botella de 16 variables latentes mediante capas densas con activación ReLU y reconstrucción con función sigmoide, optimizada exclusivamente con entropía cruzada binaria (`binary_crossentropy`).

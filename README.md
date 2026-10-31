@@ -4,6 +4,7 @@
 **Asignatura:** Ciencia de Datos II  
 **Docente:** Edwin Ramón José Nolasco  
 **Estudiante:** Juan Aníbal Pérez  
+**Repositorio GitHub:** [https://github.com/sistemasperez/CienciaDatos2-U03.E06](https://github.com/sistemasperez/CienciaDatos2-U03.E06)  
 **Estado:** Proyecto 100% reproducible, auditado y testeado bajo rúbrica analítica (5.0 / 5.0 pts).
 
 ---
