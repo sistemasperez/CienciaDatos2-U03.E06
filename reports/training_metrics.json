@@ -1,0 +1,27 @@
+{
+  "dataset": "Fashion-MNIST",
+  "train_samples": 60000,
+  "test_samples": 10000,
+  "autoencoder": {
+    "latent_dim": 16,
+    "parameters": 25888,
+    "train_seconds": 7.86,
+    "test_bce_loss": 0.3068,
+    "test_mse": 0.02029,
+    "file_size_kb": 330.66
+  },
+  "vae": {
+    "latent_dim": 2,
+    "encoder_parameters": 100996,
+    "decoder_parameters": 101520,
+    "total_parameters": 202516,
+    "train_seconds": 12.44,
+    "test_reconstruction_bce": 0.3405,
+    "test_reconstruction_mse": 0.03299,
+    "test_kl_divergence": 6.3018,
+    "file_size_kb": 415.66,
+    "mean_nn_distance_to_train": 2.9571,
+    "min_nn_distance_to_train": 1.6831,
+    "mean_sample_diversity": 5.8485
+  }
+}
